@@ -3,6 +3,9 @@
   publish = "."
   functions = "netlify/functions"
 
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "SIMULATION_USER,SIMULATION_PASS"
+
 # pengalihan api login
 [[redirects]]
   from = "/api/login"
