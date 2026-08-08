@@ -1821,13 +1821,14 @@ function drawAblation(M){
              <div class="mono" style="font-size:11px;color:var(--ink-2);margin-top:6px">AUPRC ${N(a.auprc,6)}</div></div>`;
   });
   const s = M.ablation_seizure_feature;
+  const fullAuc = (M.poseidon && M.poseidon.auc) ? M.poseidon.auc : (s ? s.with_auc : 0);
   if(s){
     html += `<div class="abl-card" style="border-color:var(--flare)">
       <b>${N(s.without_auc,4)}</b><span>Tanpa fitur jarak ke penindakan · AUC</span>
-      <div class="mono" style="font-size:11px;color:var(--ink-2);margin-top:6px">dengan fitur: ${N(s.with_auc,4)}</div></div>`;
+      <div class="mono" style="font-size:11px;color:var(--ink-2);margin-top:6px">dengan fitur: ${N(fullAuc,4)}</div></div>`;
   }
   html += '</div>';
-  if(s) html += `<p class="note">Menghapus fitur jarak ke lokasi penindakan historis menurunkan AUC dari ${N(s.with_auc,4)} ke ${N(s.without_auc,4)}, namun tetap di atas seluruh model pembanding. Performa tidak bergantung pada fitur yang berkorelasi dengan proses pembentukan label.</p>`;
+  if(s) html += `<p class="note">Menghapus fitur jarak ke lokasi penindakan historis menurunkan AUC dari ${N(fullAuc,4)} ke ${N(s.without_auc,4)}, namun tetap di atas seluruh model pembanding. Performa tidak bergantung pada fitur yang berkorelasi dengan proses pembentukan label.</p>`;
   document.getElementById('ablPanel').innerHTML = html;
 }
 
