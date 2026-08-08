@@ -157,7 +157,7 @@ async function fetchDataset(fileName) {
   const isNetlify = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
   const headers = AUTH.getAuthHeader();
   
-  if (isNetlify && !isSimulation) {
+  if (isNetlify) {
     try {
       const res = await fetch(`/.netlify/functions/data?file=${encodeURIComponent(fileName)}`, { headers });
       if (res.ok) return await res.json();
@@ -796,18 +796,26 @@ function initDashboard(){
   document.getElementById('exportDashGeoJSON').onclick = () => exportPassData(S.passes[S.passIdx].id, 'geojson');
   document.getElementById('exportDashCSV').onclick = () => exportPassData(S.passes[S.passIdx].id, 'csv');
 
-  const years = [...new Set(S.passes.map(p=>p.year))].sort();
+  if (!S.passes || !S.passes.length) return;
+  const years = [...new Set(S.passes.map(p => p.year))].sort();
   const yearSel = document.getElementById('jumpYear');
-  yearSel.innerHTML = years.map(y=>`<option value="${y}">${y}</option>`).join('');
-  yearSel.onchange = ()=>{ fillJumpPass(+yearSel.value); selectPass(+document.getElementById('jumpPass').value); };
-  document.getElementById('jumpPass').onchange = e=>selectPass(+e.target.value);
+  if (yearSel) {
+    yearSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+    yearSel.onchange = () => { fillJumpPass(+yearSel.value); selectPass(+document.getElementById('jumpPass').value); };
+  }
+  const jumpPassEl = document.getElementById('jumpPass');
+  if (jumpPassEl) {
+    jumpPassEl.onchange = e => selectPass(+e.target.value);
+  }
 
-  const first2025 = S.passes.findIndex(p=>p.year===2025);
+  const first2025 = S.passes.findIndex(p => p.year === 2025);
   const start = first2025 >= 0 ? first2025 : 0;
-  yearSel.value = S.passes[start].year;
-  fillJumpPass(S.passes[start].year);
-  renderTimelineSparkline();
-  selectPass(start);
+  if (S.passes[start] && yearSel) {
+    yearSel.value = S.passes[start].year;
+    fillJumpPass(S.passes[start].year);
+    renderTimelineSparkline();
+    selectPass(start);
+  }
 
   buildSeizureLayer();
   buildFishingLayer();
@@ -1568,9 +1576,11 @@ function drawOpList(pass, tier, onlyConf){
 
 /* statistik */
 function renderStatistik(){
-  const M = S.metrics, p = M.poseidon, cmp = M.comparison||[];
-  const pos = cmp.find(r=>r.Model.includes('POSEIDON'));
-  const d = S.meta.data;
+  const M = S.metrics || {};
+  const p = M.poseidon || null;
+  const cmp = M.comparison || [];
+  const pos = cmp.find(r => r && r.Model && r.Model.includes('POSEIDON'));
+  const d = S.meta ? S.meta.data : null;
 
   const lblPassCount = document.getElementById('lblPassCount');
   if(lblPassCount && d) lblPassCount.textContent = `${d.n_passes}`;
