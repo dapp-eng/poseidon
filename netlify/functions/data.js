@@ -3,18 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const SECRET_KEY = process.env.AUTH_SECRET;
-if (!SECRET_KEY) throw new Error('AUTH_SECRET env var tidak dikonfigurasi.');
-
 /* verify session token */
 function verifyToken(tokenString) {
   if (!tokenString) return null;
+  const secretKey = process.env.AUTH_SECRET;
+  if (!secretKey) return null;
   try {
     const parts = tokenString.split('.');
     if (parts.length !== 2) return null;
 
     const payloadStr = Buffer.from(parts[0], 'base64').toString('utf8');
-    const expectedSig = crypto.createHmac('sha256', SECRET_KEY).update(payloadStr).digest('hex');
+    const expectedSig = crypto.createHmac('sha256', secretKey).update(payloadStr).digest('hex');
 
     if (parts[1] !== expectedSig) return null;
 
@@ -28,7 +27,7 @@ function verifyToken(tokenString) {
 }
 
 /* data proxy handler */
-exports.handler = async function(event) {
+exports.handler = async function (event) {
   const filePathParam = event.queryStringParameters ? event.queryStringParameters.file : null;
   if (!filePathParam) {
     return { statusCode: 400, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ error: 'Parameter file wajib diisi.' }) };

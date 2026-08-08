@@ -1,21 +1,25 @@
 /* serverless auth login */
 const crypto = require('crypto');
-const SECRET_KEY = process.env.AUTH_SECRET;
-if (!SECRET_KEY) throw new Error('AUTH_SECRET env var tidak dikonfigurasi.');
 
 /* generate session token */
 function generateToken(username) {
+  const secretKey = process.env.AUTH_SECRET;
+  if (!secretKey) return null;
   const expiresAt = Date.now() + 3600 * 1000;
   const payload = JSON.stringify({ user: username, exp: expiresAt });
-  const signature = crypto.createHmac('sha256', SECRET_KEY).update(payload).digest('hex');
+  const signature = crypto.createHmac('sha256', secretKey).update(payload).digest('hex');
   const token = Buffer.from(payload).toString('base64') + '.' + signature;
   return { token, expiresAt };
 }
 
 /* login handler */
-exports.handler = async function(event) {
+exports.handler = async function (event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ success: false, message: 'Method Not Allowed' }) };
+  }
+
+  if (!process.env.AUTH_SECRET) {
+    return { statusCode: 500, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ success: false, message: 'AUTH_SECRET belum dikonfigurasi di Netlify Dashboard.' }) };
   }
 
   try {
