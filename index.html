@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>POSEIDON - Prioritisasi Patroli IUU Fishing WPP-711</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <header class="nav">
+    <a class="brand" href="#" data-tab="platform">
+      <span class="brand-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+          <path d="M12 3v3" />
+          <path d="M12 18v3" />
+          <path d="M3 12h3" />
+          <path d="M18 12h3" />
+        </svg>
+      </span>
+      <span class="brand-text">
+        <b>POSEIDON</b>
+        <small>WPP-711 · Natuna Utara</small>
+      </span>
+    </a>
+    <nav class="nav-tabs">
+      <div class="nav-boat-slider" id="navBoatSlider">
+        <div class="boat-floating-wrap">
+          <div class="boat-vessel">
+            <svg width="44" height="24" viewBox="0 0 44 24" fill="none">
+              <path d="M4 17C10 17 12 18 16 18H36L42 12L38 10H30L26 6H12L8 10H4L4 17Z" fill="#0D2D44" stroke="#66D9E8" stroke-width="1.3" stroke-linejoin="round" />
+              <path d="M6 15L38 15" stroke="#1477B8" stroke-width="1.5" />
+              <path d="M12 10V5H24L28 10H12Z" fill="#143D5C" stroke="#66D9E8" stroke-width="1.2" />
+              <rect x="15" y="6.5" width="2.5" height="2" fill="#66D9E8" rx="0.5" />
+              <rect x="19" y="6.5" width="2.5" height="2" fill="#66D9E8" rx="0.5" />
+              <rect x="23" y="6.5" width="2.5" height="2" fill="#66D9E8" rx="0.5" />
+              <line x1="20" y1="5" x2="20" y2="2" stroke="#66D9E8" stroke-width="1.2" />
+              <path d="M20 2L24 3.5L20 5" fill="#66D9E8" />
+              <circle cx="9" cy="12" r="1.2" fill="#66D9E8" />
+              <circle cx="15" cy="12" r="1.2" fill="#66D9E8" />
+              <circle cx="21" cy="12" r="1.2" fill="#66D9E8" />
+            </svg>
+          </div>
+          <div class="boat-bow-spray"></div>
+        </div>
+        <div class="boat-water-surface">
+          <svg class="water-wave-svg" viewBox="0 0 120 12" preserveAspectRatio="none">
+            <path d="M0 6 Q 15 2, 30 6 T 60 6 T 90 6 T 120 6 L 120 12 L 0 12 Z" fill="rgba(20, 119, 184, 0.45)" />
+            <path d="M0 8 Q 15 5, 30 8 T 60 8 T 90 8 T 120 8" stroke="rgba(102, 217, 232, 0.75)" stroke-width="1.2" fill="none" />
+          </svg>
+          <div class="foam-bubbles">
+            <span class="fb fb1"></span>
+            <span class="fb fb2"></span>
+            <span class="fb fb3"></span>
+          </div>
+        </div>
+        <div class="boat-particle-container"></div>
+      </div>
+      <button class="tab is-active" data-tab="platform">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </svg>
+        <span>Platform</span>
+      </button>
+      <button class="tab" data-tab="dashboard">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+          <line x1="8" y1="2" x2="8" y2="18" />
+          <line x1="16" y1="6" x2="16" y2="22" />
+        </svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="tab" data-tab="operasi">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <circle cx="12" cy="12" r="6" />
+          <circle cx="12" cy="12" r="2" />
+        </svg>
+        <span>Prioritas Patroli</span>
+      </button>
+      <button class="tab" data-tab="statistik">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        <span>Validasi Model</span>
+      </button>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Buka Menu Navigasi">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    <div class="nav-meta-group" style="display:flex;align-items:center;gap:10px;">
+      <div class="nav-auth-container" id="navAuthContainer">
+        <button class="nav-auth-btn is-login" id="btnHeaderLogin" title="Login Sistem Operasional">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          <span>Login</span>
+        </button>
+
+        <!-- badge pengguna & tombol keluar -->
+        <div class="nav-auth-badge" id="navAuthBadge" style="display:none;">
+          <span class="auth-user-chip" id="authUserChip">👤 OPERATOR</span>
+          <span class="auth-timer-chip" id="authTimerChip">60m</span>
+          <button class="nav-auth-btn is-logout" id="btnLogout" title="Keluar dari Sesi Operasional">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span>Keluar</span>
+          </button>
+        </div>
+      </div>
+      <div class="nav-meta mono" id="navMeta">memuat…</div>
+    </div>
+  </header>
+
+  <!-- tampilan platform -->
+  <main class="view is-active" id="view-platform">
+
+    <section class="band band-hero">
+      <div class="sweep" aria-hidden="true">
+        <svg viewBox="0 0 600 600" class="sweep-svg">
+          <defs>
+            <radialGradient id="sweepGrad">
+              <stop offset="0%" stop-color="#66D9E8" stop-opacity=".55" />
+              <stop offset="100%" stop-color="#66D9E8" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <circle cx="300" cy="300" r="286" class="ring" />
+          <circle cx="300" cy="300" r="214" class="ring" />
+          <circle cx="300" cy="300" r="142" class="ring" />
+          <circle cx="300" cy="300" r="70" class="ring" />
+          <line x1="14" y1="300" x2="586" y2="300" class="ring" />
+          <line x1="300" y1="14" x2="300" y2="586" class="ring" />
+          <g class="sweep-arm">
+            <path d="M300 300 L300 14 A286 286 0 0 1 502 98 Z" fill="url(#sweepGrad)" />
+          </g>
+          <g id="sweepDots"></g>
+        </svg>
+      </div>
+      <div class="band-inner hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow mono">Sistem pendukung keputusan · simulasi <span id="lblHeroYears">2023–2025</span></p>
+          <h1>
+            <span class="hero-subtext">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <span>Setiap 6–12 hari, satelit melintas di atas Laut Natuna Utara.</span>
+            </span>
+            <em>POSEIDON memilih<br>sepuluh kapal prioritas<br>dari setiap perlintasan.</em>
+          </h1>
+          <p class="lede">Radar Sentinel-1 mendeteksi kapal tanpa AIS, namun tidak bisa menentukan mana yang paling
+            berisiko. POSEIDON mengevaluasi setiap deteksi dari empat dimensi bukti, lalu menghasilkan daftar prioritas
+            yang siap digunakan kapal patroli.</p>
+          <div class="hero-stats" id="heroStats"></div>
+        </div>
+      </div>
+      <button class="scroll-cue" data-scroll="#bandProblem" aria-label="Gulir ke bawah"><span></span></button>
+    </section>
+
+    <section class="band band-problem" id="bandProblem">
+      <div class="band-inner">
+        <p class="eyebrow mono">01 · Masalahnya</p>
+        <h2>Datanya sudah ada. Yang belum ada adalah urutannya.</h2>
+        <div class="two-col">
+          <p>Data deteksi kapal tanpa AIS tersedia secara terbuka dan pemantauan di Laut Natuna Utara berjalan rutin.
+            Masalahnya, setiap siklus satelit bisa menghasilkan ratusan titik deteksi sekaligus, sementara armada
+            patroli sangat terbatas. Tanpa sistem prioritas, data itu tidak bisa diterjemahkan ke tindakan nyata.</p>
+          <p>Pendekatan umum di luar negeri bertumpu pada anomali AIS: kapal yang tiba-tiba mematikan transponder.
+            Metode itu tidak berlaku di Indonesia karena sebagian besar kapal nelayan memang tidak pernah menggunakan
+            AIS. Tidak ada baseline perilaku yang bisa dijadikan referensi.</p>
+        </div>
+        <div class="stat-strip" id="problemStats"></div>
+      </div>
+    </section>
+
+    <section class="band band-method">
+      <div class="band-inner">
+        <p class="eyebrow mono">02 · Empat dimensi bukti</p>
+        <h2>Satu titik radar, dibaca dari empat sisi.</h2>
+        <div class="dim-grid" id="dimGrid"></div>
+      </div>
+    </section>
+
+    <section class="band band-pipeline">
+      <div class="band-inner">
+        <p class="eyebrow mono">03 · Alur kerja</p>
+        <h2>Dari citra satelit ke daftar prioritas patroli.</h2>
+        <ol class="pipeline" id="pipelineList"></ol>
+      </div>
+    </section>
+
+    <section class="band band-learn">
+      <div class="band-inner">
+        <p class="eyebrow mono">04 · Inti metodologi</p>
+        <h2>Kapal yang belum tertangkap bukan berarti kapal yang bersih.</h2>
+        <div class="two-col">
+          <p>Dari <span id="lblTotalDet">151.851</span> deteksi dalam dataset, hanya <span id="lblLabelP">36</span> yang statusnya terkonfirmasi ilegal melalui catatan penindakan
+            resmi. Sisanya <span id="lblLabelU">128.381</span> berstatus tidak diketahui. Model klasifikasi konvensional memperlakukan seluruh data
+            tidak berlabel sebagai negatif, sehingga secara aktif belajar mengabaikan pola yang menyerupai kasus ilegal
+            yang belum terbukti.</p>
+          <p>POSEIDON dilatih dengan <b>Positive-Unlabeled (PU) Learning</b>: model tidak dihukum saat memberi skor
+            tinggi pada deteksi berlabel tidak diketahui. Dalam evaluasi out-of-fold dengan protokol yang sepenuhnya
+            setara, POSEIDON secara konsisten mengungguli empat model pembanding.</p>
+        </div>
+        <div class="compare-mini" id="compareMini"></div>
+      </div>
+    </section>
+
+    <section class="band band-limit">
+      <div class="band-inner">
+        <p class="eyebrow mono">05 · Batas yang kami akui</p>
+        <h2>Sistem ini menyusun prioritas. Bukan memvonis.</h2>
+        <ul class="limit-list">
+          <li><b>Skor bukan probabilitas pelanggaran.</b> Peringkat lebih tinggi berarti lebih diprioritaskan untuk
+            diverifikasi, bukan bukti pelanggaran.</li>
+          <li><b>Label positif sangat sedikit.</b> Model dilatih hanya dari <span id="lblLimitP">36</span> kasus terkonfirmasi. Pola yang jarang
+            muncul kemungkinan belum terwakilan.</li>
+          <li><b>Tidak semua penindakan tercocokkan.</b> Dari <span id="lblLimitSeizTotal">56</span> catatan penindakan, <span id="lblLimitSeizUnmatched">20</span> terjadi di luar jangkauan
+            temporal maupun spasial citra satelit yang tersedia.</li>
+          <li><b>Output berbasis data historis.</b> Seluruh hasil dihitung dari data <span id="lblLimitYears">2023–2025</span>, bukan aliran real-time.
+            Penerapan operasional memerlukan integrasi dengan database penindakan aktif.</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn btn-primary" data-tab="dashboard">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+              <line x1="8" y1="2" x2="8" y2="18" />
+              <line x1="16" y1="6" x2="16" y2="22" />
+            </svg>
+            <span>Buka peta operasional</span>
+          </button>
+          <button class="btn" data-tab="statistik">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4" />
+              <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+            <span>Lihat validasi model</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- tampilan dashboard -->
+  <main class="view" id="view-dashboard">
+    <div class="dash">
+      <aside class="rail" id="rail">
+        <div class="rail-group">
+          <div class="rail-head">
+            <span class="rail-head-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              Siklus satelit
+            </span>
+          </div>
+          <div class="sparkline-bar-wrap" id="timelineSparkline"></div>
+          <div class="pass-readout">
+            <div class="pass-readout-head">
+              <div class="pass-seq mono" id="passSeq">—</div>
+              <div id="passWarningContainer"></div>
+            </div>
+            <div class="pass-date" id="passDate">—</div>
+            <div class="pass-sub mono" id="passSub">—</div>
+          </div>
+          <div class="pass-nav">
+            <button class="btn-icon" id="passPrev" aria-label="Siklus sebelumnya">‹</button>
+            <button class="btn-icon" id="passPlay" aria-label="Putar linimasa">▶</button>
+            <input type="range" id="passSlider" min="0" max="0" value="0" aria-label="Geser siklus">
+            <button class="btn-icon" id="passNext" aria-label="Siklus berikutnya">›</button>
+          </div>
+          <div class="pass-jump">
+            <select id="jumpYear" aria-label="Pilih tahun"></select>
+            <select id="jumpPass" aria-label="Pilih tanggal siklus"></select>
+          </div>
+        </div>
+
+        <div class="rail-group">
+          <div class="rail-head">
+            <span class="rail-head-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Rata-rata Revisit Satelit
+            </span>
+          </div>
+          <div class="revisit-stats-box">
+            <div class="revisit-stat-row">
+              <span class="revisit-label">Periode Data (2023–2025)</span>
+              <span class="revisit-badge">570 perlintasan</span>
+            </div>
+            <div class="revisit-metrics-grid">
+              <div class="revisit-metric">
+                <span class="revisit-tag">Rata-Rata</span>
+                <span class="revisit-val" id="revisitMeanVal">1,92</span>
+                <span class="revisit-unit">hari / siklus</span>
+              </div>
+              <div class="revisit-metric">
+                <span class="revisit-tag">Median</span>
+                <span class="revisit-val" id="revisitMedianVal">2,00</span>
+                <span class="revisit-unit">hari / siklus</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rail-group">
+          <div class="rail-head">
+            <span class="rail-head-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 21h20" />
+                <path d="M5 21V7l7-4 7 4v14" />
+              </svg>
+              Kategori kapal
+            </span>
+            <button class="mini-link" id="catAll">semua</button>
+          </div>
+          <div class="legend" id="catLegend"></div>
+        </div>
+
+        <div class="rail-group">
+          <div class="rail-head">
+            <span class="rail-head-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              Filter deteksi
+            </span>
+          </div>
+          <div class="rail-filter-item">
+            <label for="filterMinLen">Panjang minimal: <b id="filterMinLenVal">Semua</b></label>
+            <input type="range" id="filterMinLen" min="0" max="150" value="0" step="5">
+          </div>
+          <div class="rail-filter-item">
+            <label for="filterMinFish">Skor ikan minimal: <b id="filterMinFishVal">Semua</b></label>
+            <input type="range" id="filterMinFish" min="0" max="1" value="0" step="0.1">
+          </div>
+          <div class="rail-filter-item">
+            <label for="filterZone">Batas ZEE / MPA:</label>
+            <select id="filterZone">
+              <option value="all">Semua Wilayah</option>
+              <option value="eez50">Dekat ZEE (&lt; 50 km)</option>
+              <option value="mpa30">Dekat Konservasi (&lt; 30 km)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="rail-group">
+          <div class="rail-head">
+            <span class="rail-head-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                <polygon points="2 17 12 22 22 17" />
+                <polygon points="2 12 12 17 22 12" />
+              </svg>
+              Lapisan peta
+            </span>
+          </div>
+          <label class="chk"><input type="checkbox" id="layFishing"> <span>Potensi lokasi ikan</span></label>
+          <div class="fish-legend" id="fishLegend">
+            <span><i style="background:#0E7C6B"></i>tinggi &gt; 0,7</span>
+            <span><i style="background:#3FA796"></i>sedang 0,3–0,7</span>
+            <span><i style="background:#1B4B57"></i>rendah &lt; 0,3</span>
+          </div>
+          <label class="chk"><input type="checkbox" id="laySeizure"> <span>Lokasi penindakan</span></label>
+          <label class="chk"><input type="checkbox" id="layWpp" checked> <span>Batas WPP-711</span></label>
+          <label class="chk"><input type="checkbox" id="layTop10"> <span>Prioritas siklus ini</span></label>
+        </div>
+
+        <div class="rail-group rail-detail" id="railDetail">
+          <div class="rail-head">
+            <span class="rail-head-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="16" x2="12" y2="12" />
+                <line x1="12" y1="8" x2="12.01" y2="8" />
+              </svg>
+              Detail deteksi
+            </span>
+          </div>
+          <p class="rail-empty">Pilih satu titik di peta untuk melihat metadata lengkapnya.</p>
+        </div>
+      </aside>
+
+      <div class="map-wrap">
+        <div class="map-zoom-slider-wrap" id="mapZoomSliderWrap">
+          <button class="map-zoom-btn" id="mapZoomInBtn" title="Perbesar Peta" aria-label="Zoom In">+</button>
+          <div class="map-zoom-track">
+            <input type="range" id="mapZoomSlider" min="5" max="12" step="0.1" value="7" aria-label="Slider Zoom Peta">
+          </div>
+          <button class="map-zoom-btn" id="mapZoomOutBtn" title="Perkecil Peta" aria-label="Zoom Out">−</button>
+          <span class="map-zoom-level-badge" id="mapZoomLevelVal">7.0×</span>
+        </div>
+        <button id="mapBasemapBtn" class="map-basemap-cool-btn" title="Ganti Mode Peta (Satelit / Jalan)" aria-label="Ganti Basemap Peta">
+          <div class="basemap-icon-container">
+            <svg class="b-icon b-icon-voyager" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2" />
+              <polygon points="2 17 12 22 22 17" />
+              <polygon points="2 12 17 22 12" />
+            </svg>
+            <svg class="b-icon b-icon-satellite" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2a9 9 0 0 0-9 9" />
+              <path d="M17 2a13 13 0 0 0-13 13" />
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 15v6" />
+              <path d="M8 21h8" />
+            </svg>
+          </div>
+        </button>
+        <div class="map-search-bar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            style="color:var(--foam);align-self:center">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="mapSearchInput" placeholder="Cari ID Deteksi (#123) atau Lat, Lon...">
+          <button id="mapSearchBtn" class="btn btn-sm">Cari</button>
+        </div>
+        <div id="map"></div>
+        <div class="map-badge mono" id="mapBadge">—</div>
+        <div class="map-scroll-hint" id="mapScrollHint" title="Gulir ke bawah untuk melihat detail operasional & tabel prioritas">
+          <div class="hint-pulse-dot"></div>
+          <span class="hint-text">Detail Operasional & Prioritas Patroli</span>
+          <svg class="hint-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <section class="dash-bottom">
+      <div class="sec-head">
+        <div>
+          <p class="eyebrow mono">Keluaran operasional · <span id="lblDashOpYear">2025</span></p>
+          <h3>Sepuluh prioritas siklus <span id="topCycleLabel" class="mono">—</span></h3>
+        </div>
+        <div class="sec-actions">
+          <button class="btn btn-sm" id="exportDashGeoJSON">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Ekspor GeoJSON</span>
+          </button>
+          <button class="btn btn-sm" id="exportDashCSV">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Ekspor CSV</span>
+          </button>
+          <button class="btn" data-tab="operasi">Lihat detail</button>
+        </div>
+      </div>
+      <div class="top-strip" id="topStrip"></div>
+
+      <!-- ringkasan risiko operasional siklus -->
+      <div id="dashExtraSummary" style="margin-top:28px"></div>
+
+      <!-- matriks faktor risiko agregat -->
+      <div id="dashRiskMatrix" style="margin-top:24px"></div>
+
+      <!-- tabel komparasi operasional kapal prioritas -->
+      <div id="dashTablePanel" style="margin-top:24px"></div>
+    </section>
+  </main>
+
+  <!-- tampilan operasi -->
+  <main class="view" id="view-operasi">
+    <div class="page">
+      <p class="eyebrow mono">Keluaran operasional</p>
+      <h2 class="page-title">Prioritas patroli per siklus satelit</h2>
+      <p class="page-lede">Setiap siklus menghasilkan sepuluh deteksi dengan skor risiko tertinggi. Tingkat siaga
+        ditentukan dari peringkat relatif dalam siklus yang sama, sehingga tetap sebanding antar siklus. Status
+        conformal merupakan pemeriksaan independen: apakah skor kapal tersebut melewati ambang jaminan cakupan 90% yang
+        dikalibrasi via conformal prediction.</p>
+
+      <div class="op-controls">
+        <div class="date-picker-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sonar)" stroke-width="2"
+            class="date-icon">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          <select id="opCycle" aria-label="Pilih siklus"></select>
+        </div>
+        <div class="seg" id="opTierFilter">
+          <button class="seg-btn is-on" data-tier="all">Semua</button>
+          <button class="seg-btn" data-tier="1">Siaga 1</button>
+          <button class="seg-btn" data-tier="2">Siaga 2</button>
+          <button class="seg-btn" data-tier="3">Siaga 3</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="opConformal"> <span>Hanya yang lolos conformal</span></label>
+        <div class="op-actions" style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-sm btn-primary" id="opExportGeoJSON">Ekspor GeoJSON Briefing</button>
+          <button class="btn btn-sm" id="opExportCSV">Ekspor CSV Briefing</button>
+        </div>
+      </div>
+
+      <div class="op-chart-card" id="opSiaga1ChartCard" style="margin-bottom: 24px;">
+        <div class="op-chart-head">
+          <div class="op-chart-title">
+            <div class="op-chart-icon-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF6B45" stroke-width="2.5"><rect x="3" y="12" width="4" height="8" rx="1"/><rect x="10" y="7" width="4" height="13" rx="1"/><rect x="17" y="3" width="4" height="17" rx="1"/></svg>
+            </div>
+            <span class="op-chart-title-text">Distribusi Skor Siaga 1 (Prioritas Verifikasi) 2025</span>
+          </div>
+          <div class="op-chart-legend mono">
+            <span class="legend-p70">⚡ P70 (&gt; 0,0225)</span>
+            <span class="legend-active" id="opChartActiveLabel">—</span>
+          </div>
+        </div>
+        <div class="op-bar-chart-wrap" id="opSiaga1BarChart"></div>
+      </div>
+
+      <div class="op-list" id="opList"></div>
+    </div>
+  </main>
+
+  <!-- tampilan statistik -->
+  <main class="view" id="view-statistik">
+    <div class="page">
+      <p class="eyebrow mono">Validasi</p>
+      <h2 class="page-title">Performa model secara terukur</h2>
+      <p class="page-lede">Seluruh metrik dihitung secara out-of-fold: setiap deteksi dievaluasi oleh model yang tidak
+        pernah melihatnya saat training. Model pembanding dilatih dengan fitur, jumlah iterasi, dan protokol
+        cross-validation yang identik. Selisih performa mencerminkan perbedaan metodologi, bukan perbedaan tuning.</p>
+
+      <div class="kpi-row" id="kpiRow"></div>
+
+      <div class="panel">
+        <h3>Tren Musiman Kapal Tanpa AIS (<span id="lblTimeSeriesYears">2023–2025</span>)</h3>
+        <p class="note">Grafik waktu menunjukkan fluktuasi akumulasi kapal tanpa AIS per bulan berdasarkan <span id="lblPassCount">570</span> siklus
+          perlintasan satelit Sentinel-1.</p>
+        <div id="timeSeriesChart" style="margin-top:16px"></div>
+      </div>
+
+      <div class="panel">
+        <h3>Perbandingan dengan empat model pembanding</h3>
+        <div class="table-scroll">
+          <table class="tbl" id="cmpTable"></table>
+        </div>
+        <p class="note">Alert Efficiency: proporsi kasus terkonfirmasi ilegal yang masuk dalam Top-10 di siklus
+          deteksinya masing-masing. Setara dengan recall pada protokol operasional.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Precision pada K teratas</h3>
+          <div id="atkChart"></div>
+        </div>
+        <div class="panel">
+          <h3>Kurva Precision–Recall</h3>
+          <div id="prChart"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Tradeoff: jaminan cakupan vs. beban kerja patroli</h3>
+        <p class="note">Target coverage yang lebih tinggi mengharuskan lebih banyak kapal diperiksa per siklus. Kurva
+          ini membantu menyesuaikan ambang conformal dengan kapasitas armada yang tersedia.</p>
+        <div id="tradeChart"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Kontribusi fitur (feature importance)</h3>
+          <div id="impChart"></div>
+        </div>
+        <div class="panel">
+          <h3>Kalibrasi conformal prediction</h3>
+          <div id="confPanel"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Ablation study</h3>
+        <div id="ablPanel"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <span class="mono">POSEIDON · DATATHON 2026</span>
+    <span class="mono" id="footMeta"></span>
+  </footer>
+
+  <!-- auth lock overlay -->
+  <div class="auth-lock-overlay" id="authLockOverlay" style="display:none;">
+    <div class="auth-card">
+      <div class="auth-shield-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FF6B45" stroke-width="2.2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h3 class="auth-title">Akses Terbatas Operasional</h3>
+      <p class="auth-subtitle">Sistem Pendukung Keputusan WPP-711 Natuna Utara</p>
+      <p class="auth-desc">Menu Dashboard Peta & Prioritas Patroli hanya dapat diakses oleh personel berwenang. Silakan masukkan kredensial operasional Anda.</p>
+      
+      <div class="auth-sim-box">
+        <div class="auth-sim-header">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#66D9E8" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+          <span>Kredensial Mode Simulasi (2023–2025)</span>
+        </div>
+        <p class="auth-sim-desc">Untuk mengakses data simulasi historis 2023–2025, gunakan kredensial berikut:</p>
+        <div class="auth-sim-credentials">
+          <span>Username: <b>simulasi</b></span>
+          <span>Password: <b>simulasi123</b></span>
+          <button type="button" class="btn-sim-quickfill" id="btnSimQuickFill">Isi Otomatis</button>
+        </div>
+      </div>
+
+      <form class="auth-form" id="authLoginForm" onsubmit="return false;">
+        <div class="auth-field">
+          <label for="authUsername">Username</label>
+          <div class="auth-input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#66D9E8" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input type="text" id="authUsername" placeholder="Masukkan username operasional..." required autocomplete="username">
+          </div>
+        </div>
+        
+        <div class="auth-field">
+          <label for="authPassword">Password</label>
+          <div class="auth-input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#66D9E8" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="password" id="authPassword" placeholder="Masukkan password..." required autocomplete="current-password">
+            <button type="button" class="auth-pwd-toggle" id="authPwdToggle" title="Tampilkan/Sembunyikan Password">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="authPwdEyeIcon">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-alert" id="authAlert" style="display:none;"></div>
+
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="authSubmitBtn">
+          <span>Login</span>
+        </button>
+      </form>
+      
+      <div class="auth-footer-badge">
+        <span class="hint-pulse-dot" style="background:#4ADE80;box-shadow:0 0 6px #4ADE80;"></span>
+        <span>Durasi Sesi Akses: <b>60 Menit</b></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="global-bar-tooltip" id="globalBarTooltip"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="ocean.js"></script>
+  <script src="dashboard_bg.js"></script>
+  <script src="operasi_bg.js"></script>
+  <script src="statistik_bg.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
