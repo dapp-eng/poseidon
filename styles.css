@@ -1482,6 +1482,52 @@ select option {
   border-radius: 20px;
   font-size: 12.5px;
   letter-spacing: .06em;
+  white-space: nowrap;
+}
+
+.map-scroll-hint {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(8, 34, 52, 0.94) 0%, rgba(4, 20, 32, 0.96) 100%);
+  border: 1px solid rgba(102, 217, 232, 0.45);
+  border-radius: 20px;
+  padding: 8px 16px;
+  color: #FFFFFF;
+  font-family: var(--f-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 14px rgba(102, 217, 232, 0.2);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.map-scroll-hint:hover {
+  background: linear-gradient(135deg, rgba(14, 48, 72, 0.96) 0%, rgba(8, 30, 48, 0.98) 100%);
+  border-color: #66D9E8;
+  color: #66D9E8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 20px rgba(102, 217, 232, 0.35);
+}
+
+.map-scroll-hint .hint-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #66D9E8;
+  box-shadow: 0 0 8px #66D9E8;
+  flex-shrink: 0;
+}
+
+.map-scroll-hint .hint-arrow {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
 }
 
 .leaflet-container {
@@ -3564,6 +3610,18 @@ svg.chart {
   }
   .map-zoom-track {
     height: 100px;
+  }
+  .map-badge {
+    left: 10px;
+    bottom: 12px;
+    font-size: 10.5px;
+    padding: 4px 10px;
+    border-radius: 10px;
+    background: rgba(4, 24, 38, 0.94);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+  .map-scroll-hint {
+    display: none !important;
   }
 }
 
