@@ -1794,7 +1794,7 @@ function drawImportance(rows){
     const y = i*rh+14, w = (r.gain_pct/max)*(W-L-R);
     s += `<text x="${L-10}" y="${y+12}" text-anchor="end" style="font-size:11.5px">${lbl}</text>
           <rect class="bar dim${r.dimension}" x="${L}" y="${y+2}" width="${Math.max(w,1)}" height="14" rx="2"/>
-          <text x="${L+w+8}" y="${y+13}" style="font-size:11.5px">${N(r.gain_pct,1)}%</text>`;
+          <text x="${L+w+8}" y="${y+13}" style="font-size:11.5px">${N(r.gain_pct,2)}%</text>`;
   });
   s += `<line class="ax" x1="${L}" y1="${H-22}" x2="${W-R}" y2="${H-22}"/>
         <text x="${L}" y="${H-6}" style="font-size:11.5px;fill:var(--ink-2)">Warna batang menandai dimensi A / B / C / D</text></svg>`;
