@@ -100,13 +100,8 @@
         <span>Validasi Model</span>
       </button>
     </nav>
-    <button class="nav-toggle" id="navToggle" aria-label="Buka Menu Navigasi">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="18" x2="21" y2="18" />
-      </svg>
-    <div class="nav-meta-group" style="display:flex;align-items:center;gap:10px;">
+    <div class="nav-meta-group" id="navMetaGroup">
+      <div class="nav-meta mono" id="navMeta">memuat…</div>
       <div class="nav-auth-container" id="navAuthContainer">
         <button class="nav-auth-btn is-login" id="btnHeaderLogin" title="Login Sistem Operasional">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -117,10 +112,11 @@
           <span>Login</span>
         </button>
 
-        <!-- badge pengguna & tombol keluar -->
         <div class="nav-auth-badge" id="navAuthBadge" style="display:none;">
-          <span class="auth-user-chip" id="authUserChip">👤 OPERATOR</span>
-          <span class="auth-timer-chip" id="authTimerChip">60m</span>
+          <div class="auth-info-group">
+            <span class="auth-user-chip" id="authUserChip">OPERATOR</span>
+            <span class="auth-timer-chip" id="authTimerChip">60m</span>
+          </div>
           <button class="nav-auth-btn is-logout" id="btnLogout" title="Keluar dari Sesi Operasional">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -131,7 +127,13 @@
           </button>
         </div>
       </div>
-      <div class="nav-meta mono" id="navMeta">memuat…</div>
+      <button class="nav-toggle" id="navToggle" aria-label="Buka Menu Navigasi" title="Menu Navigasi">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
     </div>
   </header>
 

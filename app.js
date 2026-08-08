@@ -108,9 +108,12 @@ const AUTH = {
 
     if (session) {
       if (loginBtn) loginBtn.style.display = 'none';
-      if (badge) badge.style.display = 'flex';
+      if (badge) badge.style.display = 'inline-flex';
       const isSim = session.user.toLowerCase() === 'simulasi';
-      if (userChip) userChip.textContent = isSim ? `👤 SIMULASI (2023–2025)` : `👤 ${session.user.toUpperCase()}`;
+      if (userChip) {
+        userChip.textContent = isSim ? 'SIMULASI' : session.user.toUpperCase();
+        userChip.title = isSim ? 'Mode Simulasi (2023–2025)' : `Akun: ${session.user.toUpperCase()}`;
+      }
 
       const remMs = session.expiresAt - Date.now();
       const remMins = Math.max(0, Math.ceil(remMs / 60000));
@@ -119,8 +122,33 @@ const AUTH = {
       if (badge) badge.style.display = 'none';
       if (loginBtn) loginBtn.style.display = 'inline-flex';
     }
+    repositionNavAuth();
   }
 };
+
+function repositionNavAuth() {
+  const isMobile = window.innerWidth <= 960;
+  const authContainer = document.getElementById('navAuthContainer');
+  const navTabs = document.querySelector('.nav-tabs');
+  const navMetaGroup = document.getElementById('navMetaGroup');
+
+  if (!authContainer || !navTabs || !navMetaGroup) return;
+
+  if (isMobile) {
+    if (authContainer.parentElement !== navTabs) {
+      navTabs.appendChild(authContainer);
+    }
+  } else {
+    if (authContainer.parentElement !== navMetaGroup) {
+      const navToggle = document.getElementById('navToggle');
+      if (navToggle) {
+        navMetaGroup.insertBefore(authContainer, navToggle);
+      } else {
+        navMetaGroup.appendChild(authContainer);
+      }
+    }
+  }
+}
 
 /* protected data fetcher */
 async function fetchDataset(fileName) {
@@ -188,6 +216,10 @@ function initAuthEvents() {
   if (btnHeaderLogin) {
     btnHeaderLogin.onclick = () => {
       switchTab('dashboard');
+      const navTabsEl = document.querySelector('.nav-tabs');
+      const navToggleBtn = document.getElementById('navToggle');
+      if (navTabsEl) navTabsEl.classList.remove('is-open');
+      if (navToggleBtn) navToggleBtn.classList.remove('is-open');
       const inputUser = document.getElementById('authUsername');
       if (inputUser) setTimeout(() => inputUser.focus(), 150);
     };
@@ -218,6 +250,10 @@ function initAuthEvents() {
 
   if (btnLogout) {
     btnLogout.onclick = () => {
+      const navTabsEl = document.querySelector('.nav-tabs');
+      const navToggleBtn = document.getElementById('navToggle');
+      if (navTabsEl) navTabsEl.classList.remove('is-open');
+      if (navToggleBtn) navToggleBtn.classList.remove('is-open');
       AUTH.logout();
     };
   }
@@ -343,13 +379,17 @@ async function boot(){
         if(MAP) MAP.invalidateSize();
         const current = document.querySelector('.tab.is-active');
         if (current) updateNavBoatSlider(null, current);
+        repositionNavAuth();
       });
       window.addEventListener('orientationchange', () => {
         if(MAP) setTimeout(() => MAP.invalidateSize(), 200);
         const current = document.querySelector('.tab.is-active');
         if (current) updateNavBoatSlider(null, current);
+        repositionNavAuth();
       });
     }
+
+    repositionNavAuth();
 
     checkProtectedViews();
   }catch(err){
@@ -1844,3 +1884,8 @@ window.addEventListener('keydown', e => {
 });
 
 boot();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', repositionNavAuth);
+} else {
+  repositionNavAuth();
+}
