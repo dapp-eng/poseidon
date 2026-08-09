@@ -996,8 +996,8 @@ async function selectPass(i){
   renderTopStrip(p.id);
 
   const selOp = document.getElementById('opCycle');
-  if (selOp && selOp.value !== p.id) {
-    selOp.value = p.id;
+  if (selOp) {
+    if (selOp.value !== p.id) selOp.value = p.id;
     const tierBtn = document.querySelector('#opTierFilter .is-on');
     if (tierBtn) drawOpList(p.id, tierBtn.dataset.tier, document.getElementById('opConformal').checked);
   }
