@@ -94,24 +94,24 @@ POSEIDON mengekstraksi 18 fitur yang dikelompokkan ke dalam 4 dimensi intelijen 
 
 ## Panduan Eksekusi Notebook Pipeline & Simulasi Lokal
 
-Folder `pipeline/` berisi 5 notebook Jupyter yang tersusun secara berurutan dari Phase 0 hingga Pipeline Final:
+Folder `pipeline/` berisi 5 notebook Jupyter yang tersusun secara berurutan:
 
-### 1. `POSEIDON_Phase0_Length_Regression.ipynb`
+### 1. `1_POSEIDON_Length_Regression.ipynb`
 * Deskripsi: Membangun model regresi statistik untuk memprediksi panjang kapal (Length overall dalam meter) berdasarkan Gross Tonnage (GT).
 * Prasyarat: Kredensial GFW API dan dataset EU Fleet Register.
 * Pemilihan Model: Diuji Regresi Linear, Power Law Log Log, dan Polinomial. Model Power Law Log Log dipilih karena stabilitas ekstrapolasi fisik kapal:
   $$\text{Length} = 5,7251 \times \text{GT}^{0,3088} \quad (R^2 = 0,9491 \text{ full dataset}, R^2 = 0,8458 \text{ test set})$$
 * Hasil Output: Berkas model `length_regression_model.joblib`.
 
-### 2. `POSEIDON_Phase1_Load_Filter_GFW_SAR_WPP711.ipynb`
+### 2. `2_POSEIDON_Load_Filter_GFW_SAR_WPP711.ipynb`
 * Deskripsi: Memuat dan menyaring data deteksi radar SAR Sentinel 1 GFW khusus untuk koordinat WPPNRI 711 periode 2023–2025.
 * Hasil Output: Berkas dataset `gfw_sar_wpp711_2023_2025.parquet`.
 
-### 3. `POSEIDON_Phase2_SAR_Feature_Extraction_GEE.ipynb`
+### 3. `3_POSEIDON_SAR_Feature_Extraction_GEE.ipynb`
 * Deskripsi: Mengesktrak nilai intensitas radar SAR Sentinel 1 GRD (`COPERNICUS/S1_GRD`) secara otomatis dari Google Earth Engine API pada setiap titik deteksi.
 * Hasil Output: Berkas dataset `sar_wpp711_with_gee_features.parquet`.
 
-### 4. `POSEIDON_Phase3_Integrasi_4_Dimensi.ipynb`
+### 4. `4_POSEIDON_Integrasi_4_Dimensi.ipynb`
 * Deskripsi: Mengintegrasikan seluruh fitur dari 4 Dimensi MDA menggunakan perhitungan Haversine distance dan spatial join GeoPandas.
 * Hasil Output: Berkas dataset terintegrasi `POSEIDON_WPP711_complete.csv`.
 
@@ -181,10 +181,10 @@ poseidon_web/
 │       └── data.js            Proxy pengambilan data JSON terproteksi
 │
 ├── pipeline/                  Folder notebook Jupyter eksperimen dan pipeline AI
-│   ├── POSEIDON_Phase0_Length_Regression.ipynb
-│   ├── POSEIDON_Phase1_Load_Filter_GFW_SAR_WPP711.ipynb
-│   ├── POSEIDON_Phase2_SAR_Feature_Extraction_GEE.ipynb
-│   ├── POSEIDON_Phase3_Integrasi_4_Dimensi.ipynb
+│   ├── 1_POSEIDON_Length_Regression.ipynb
+│   ├── 2_POSEIDON_Load_Filter_GFW_SAR_WPP711.ipynb
+│   ├── 3_POSEIDON_SAR_Feature_Extraction_GEE.ipynb
+│   ├── 4_POSEIDON_Integrasi_4_Dimensi.ipynb
 │   └── POSEIDON_Pipeline_Final.ipynb
 │
 └── data/                      Folder data JSON aplikasi web (hanya berisi file GeoJSON WPP711 di repository ini)
